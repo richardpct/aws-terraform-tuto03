@@ -43,7 +43,7 @@ Open your web browser with the IP address of your webserver that is displayed pr
 Repeat the same steps as previously by using the staging directory instead the dev directory
 
 ## Destroying all resources you have just created
-Choose your environment by entering in dev or staging directory (or twice)
+Choose your environment by entering in dev or staging directory (or both)
 
     $ cd ../02-webserver
     $ terraform destroy
