@@ -1,12 +1,14 @@
 # Purpose
-This example takes up my second [tutorial](https://github.com/richardpct/aws-terraform-tuto02) by adding improvements:
+This example takes up my second tutorial
+[https://github.com/richardpct/aws-terraform-tuto02](https://github.com/richardpct/aws-terraform-tuto02)
+by adding improvements:
 
 * Splitting environment: Dev, Staging and Prod
 * Using different ubuntu ami according to environment
 * Using user-data to automate apache2 installation
 
 # Requirement
-* You must have an aws account, if you don't have yet, you can subscribe the free tier.
+* You must have an AWS account, if you don't have yet, you can subscribe to the free tier.
 * You must install terraform
 
 # Usage
@@ -19,7 +21,7 @@ This example takes up my second [tutorial](https://github.com/richardpct/aws-ter
     $ export TF_VAR_staging_webserver_key="terraform/staging/webserver/terraform.tfstate"
     $ export TF_VAR_ssh_public_key="ssh-rsa ..."
 
-## Creating the s3 backend to store the terraform state
+## Creating the S3 backend to store the terraform state
     $ cd environments/00-bucket
     $ terraform init
     $ terraform apply
@@ -35,10 +37,10 @@ This example takes up my second [tutorial](https://github.com/richardpct/aws-ter
     $ terraform apply
 
 ## Testing your page
-Open your web browser with the webserver IP address that is displayed previously
+Open your web browser with the IP address of your webserver that is displayed previously
 
 ## Creating the staging environment
-Repeat the same steps as before by using the staging directory instead the dev directory
+Repeat the same steps as previously by using the staging directory instead the dev directory
 
 ## Destroying all resources you have just created
 Choose your environment by entering in dev or staging directory (or twice)
