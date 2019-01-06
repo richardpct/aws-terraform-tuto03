@@ -6,6 +6,7 @@ by adding improvements:
 * Splitting environment: Dev, Staging and Prod
 * Using different ubuntu ami according to environment
 * Using user-data to automate apache2 installation
+* Allowing only my IP address to connect via SSH into the webserver
 
 # Requirement
 * You must have an AWS account, if you don't have yet, you can subscribe to the free tier.
@@ -20,11 +21,11 @@ by adding improvements:
     $ export TF_VAR_staging_network_key="terraform/staging/network/terraform.tfstate"
     $ export TF_VAR_staging_webserver_key="terraform/staging/webserver/terraform.tfstate"
     $ export TF_VAR_ssh_public_key="ssh-rsa ..."
+    $ export TF_VAR_my_ip_address=xx.xx.xx.xx/32
 
 ## Creating the S3 backend to store the terraform state
-    $ cd environments/00-bucket
-    $ terraform init
-    $ terraform apply
+If you have not created a S3 backend, see my first tutorial
+[https://github.com/richardpct/aws-terraform-tuto01](https://github.com/richardpct/aws-terraform-tuto01)
 
 ## Creating the VPC
     $ cd ../dev/01-network
@@ -42,7 +43,7 @@ Open your web browser with the IP address of your webserver that is displayed pr
 ## Creating the staging environment
 Repeat the same steps as previously by using the staging directory instead the dev directory
 
-## Destroying all resources you have just created
+## Cleaning up
 Choose your environment by entering in dev or staging directory (or both)
 
     $ cd ../02-webserver

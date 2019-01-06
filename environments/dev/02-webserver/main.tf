@@ -12,4 +12,5 @@ module "webserver" {
   instance_type               = "t2.micro"
   image_id                    = "ami-0dc12d28e8595864f"  //ubuntu 18.10
   ssh_public_key              = "${var.ssh_public_key}"
+  cidr_allowed_ssh            = "${var.my_ip_address}"
 }

@@ -25,3 +25,7 @@ variable "instance_type" {
 variable "ssh_public_key" {
   description = "ssh public key"
 }
+
+variable "cidr_allowed_ssh" {
+  description = "cidr block allowed to connect via SSH"
+}
