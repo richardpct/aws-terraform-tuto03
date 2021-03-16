@@ -1,9 +1,3 @@
----
-title: "AWS with Terraform tutorial 03"
-date: 2021-03-06T19:34:35Z
-draft: false
----
-
 ## Purpose
 
 I will introduce you a way to split your infrastructure in distinct environment
