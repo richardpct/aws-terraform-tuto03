@@ -1,5 +1,11 @@
-provider "aws" {
-  region = var.region
+data "terraform_remote_state" "network" {
+  backend = "s3"
+
+  config = {
+    bucket = var.network_remote_state_bucket
+    key    = var.network_remote_state_key
+    region = var.region
+  }
 }
 
 resource "aws_key_pair" "deployer" {
@@ -43,21 +49,49 @@ resource "aws_security_group_rule" "outbound_all" {
   security_group_id = aws_security_group.webserver.id
 }
 
-data "template_file" "user_data" {
-  template = file("${path.module}/user-data.sh")
+#data "template_file" "user_data" {
+#  template = file("${path.module}/user-data.sh")
+#
+#  vars = {
+#    environment = var.env
+#  }
+#}
 
-  vars = {
-    environment = var.env
+#resource "aws_instance" "web" {
+#  ami                    = var.image_id
+#  user_data              = data.template_file.user_data.rendered
+#  instance_type          = var.instance_type
+#  key_name               = aws_key_pair.deployer.key_name
+#  subnet_id              = data.terraform_remote_state.network.outputs.subnet_public_id
+#  vpc_security_group_ids = [aws_security_group.webserver.id]
+#
+#  tags = {
+#    Name = "web_server-${var.env}"
+#  }
+#}
+
+resource "aws_launch_template" "web" {
+  name          = "web"
+  image_id      = var.image_id
+  user_data     = base64encode(templatefile("${path.module}/user-data.sh", { environment = var.env }))
+  instance_type = var.instance_type
+  key_name      = aws_key_pair.deployer.key_name
+
+  network_interfaces {
+    subnet_id                   = data.terraform_remote_state.network.outputs.subnet_public_id
+    security_groups             = [aws_security_group.webserver.id]
+    associate_public_ip_address = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
 resource "aws_instance" "web" {
-  ami                    = var.image_id
-  user_data              = data.template_file.user_data.rendered
-  instance_type          = var.instance_type
-  key_name               = aws_key_pair.deployer.key_name
-  subnet_id              = data.terraform_remote_state.network.outputs.subnet_public_id
-  vpc_security_group_ids = [aws_security_group.webserver.id]
+  launch_template {
+    id = aws_launch_template.web.id
+  }
 
   tags = {
     Name = "web_server-${var.env}"
@@ -66,7 +100,7 @@ resource "aws_instance" "web" {
 
 resource "aws_eip" "web" {
   instance = aws_instance.web.id
-  vpc      = true
+  domain   = "vpc"
 
   tags = {
     Name = "eip_web-${var.env}"
