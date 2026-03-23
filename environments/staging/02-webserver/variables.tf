@@ -1,9 +1,17 @@
+variable "region" {
+  description = "region"
+}
+
 variable "bucket" {
   description = "bucket where terraform states are stored"
 }
 
-variable "staging_network_key" {
-  description = "terraform state for staging environment"
+variable "key_network" {
+  description = "key network"
+}
+
+variable "key_webserver" {
+  description = "key webserver"
 }
 
 variable "ssh_public_key" {

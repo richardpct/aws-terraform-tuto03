@@ -13,6 +13,22 @@ resource "aws_key_pair" "deployer" {
   public_key = var.ssh_public_key
 }
 
+data "aws_ami" "amazonlinux" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-kernel-*-x86_64"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = [137112412989] # amazon owner id
+}
+
 resource "aws_security_group" "webserver" {
   name   = "sg_webserver-${var.env}"
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
@@ -49,30 +65,9 @@ resource "aws_security_group_rule" "outbound_all" {
   security_group_id = aws_security_group.webserver.id
 }
 
-#data "template_file" "user_data" {
-#  template = file("${path.module}/user-data.sh")
-#
-#  vars = {
-#    environment = var.env
-#  }
-#}
-
-#resource "aws_instance" "web" {
-#  ami                    = var.image_id
-#  user_data              = data.template_file.user_data.rendered
-#  instance_type          = var.instance_type
-#  key_name               = aws_key_pair.deployer.key_name
-#  subnet_id              = data.terraform_remote_state.network.outputs.subnet_public_id
-#  vpc_security_group_ids = [aws_security_group.webserver.id]
-#
-#  tags = {
-#    Name = "web_server-${var.env}"
-#  }
-#}
-
 resource "aws_launch_template" "web" {
   name          = "web"
-  image_id      = var.image_id
+  image_id      = data.aws_ami.amazonlinux.id
   user_data     = base64encode(templatefile("${path.module}/user-data.sh", { environment = var.env }))
   instance_type = var.instance_type
   key_name      = aws_key_pair.deployer.key_name

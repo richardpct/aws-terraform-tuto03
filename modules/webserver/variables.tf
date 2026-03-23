@@ -14,10 +14,6 @@ variable "network_remote_state_key" {
   description = "network key"
 }
 
-variable "image_id" {
-  description = "image id"
-}
-
 variable "instance_type" {
   description = "instance type"
 }
