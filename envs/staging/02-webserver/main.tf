@@ -1,6 +1,5 @@
 module "webserver" {
-  source = "../../../modules/webserver"
-
+  source                      = "../../../modules/webserver"
   region                      = "eu-west-3"
   env                         = "staging"
   network_remote_state_bucket = var.bucket

@@ -1,6 +1,5 @@
 module "network" {
-  source = "../../../modules/network"
-
+  source         = "../../../modules/network"
   aws_profile    = var.aws_profile
   region         = var.region
   env            = "dev"
