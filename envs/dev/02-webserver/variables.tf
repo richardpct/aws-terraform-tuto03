@@ -1,3 +1,7 @@
+variable "aws_profile" {
+  description = "aws profile"
+}
+
 variable "region" {
   description = "region"
 }
